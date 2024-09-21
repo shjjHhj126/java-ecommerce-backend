@@ -1,13 +1,14 @@
-# Spring Boot 3.0 Security with JWT Implementation
-This project demonstrates the implementation of security using Spring Boot 3.0 and JSON Web Tokens (JWT). It includes the following features:
+# Spring Boot 3.0 E-commerce single vendor website backend
+This project includes the following features:
 
 ## Features
 * User registration and login with JWT authentication
-* Password encryption using BCrypt
 * Role-based authorization with Spring Security
-* Customized access denied handling
-* Logout mechanism
-* Refresh token
+* Logout mechanism, Refresh token
+* Product CRUD
+* Cart CRUD
+* Order CRUD
+* Pay with Stripe
 
 ## Technologies
 * Spring Boot 3.0
@@ -15,6 +16,7 @@ This project demonstrates the implementation of security using Spring Boot 3.0 a
 * JSON Web Tokens (JWT)
 * BCrypt
 * Maven
+* Stripe
  
 ## Getting Started
 To get started with this project, you will need to have the following installed on your local machine:
@@ -25,9 +27,8 @@ To get started with this project, you will need to have the following installed 
 
 To build and run the project, follow these steps:
 
-* Clone the repository: `git clone https://github.com/ali-bouali/spring-boot-3-jwt-security.git`
-* Navigate to the project directory: cd spring-boot-security-jwt
-* Add database "jwt_security" to postgres 
+* Clone the repository: `git clone https://github.com/shjjHhj126/java-ecommerce-backend.git`
+* Add database "ecom-db" to postgres 
 * Build the project: mvn clean install
 * Run the project: mvn spring-boot:run 
 
