@@ -1,6 +1,5 @@
 package com.sherry.ecom.product.service;
 
-import com.sherry.ecom.product.Response.PropertyResponse;
 import com.sherry.ecom.product.model.Product;
 import com.sherry.ecom.product.model.ProductProperty;
 import com.sherry.ecom.product.model.ProductPropertyValue;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

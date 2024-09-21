@@ -6,7 +6,8 @@ import com.sherry.ecom.auth.RegisterRequest;
 import com.sherry.ecom.auth.AuthenticationService;
 import com.sherry.ecom.category.Category;
 import com.sherry.ecom.category.CategoryService;
-import com.sherry.ecom.product.Request.ProductRequest;
+import com.sherry.ecom.product.request.ProductRequest;
+import com.sherry.ecom.product.request.ProductVariantRequest;
 import com.sherry.ecom.product.service.ProductService;
 import com.sherry.ecom.user.Role;
 import com.sherry.ecom.user.UserService;
@@ -16,7 +17,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,8 +60,9 @@ public class ProductServiceIntegrationTest {
         RegisterRequest registerRequest = RegisterRequest.builder()
                 .firstName("The")
                 .lastName("Admin")
-                .email("theAdmin@gmail.com")//but is still a user
+                .email("theTestAdmin@gmail.com")//but is still a user
                 .password("password")
+                .role(Role.ADMIN)
                 .build();
         AuthenticationResponse authResponse = authenticationService.register(registerRequest);
 
@@ -64,22 +70,29 @@ public class ProductServiceIntegrationTest {
 
         ProductRequest productRequest = ProductRequest.builder()
                 .name("黑色迫降墨鏡")
+                .price(135)
                 .spu("SKU_245_24_093")
                 .description("市面上太陽眼鏡良莠不齊，價格也有天壤之別，有顏色的鏡片就能擋住陽光?\n" +
                         "其實劣質的太陽眼鏡鏡片會讓瞳孔放大反而會讓眼球吸收更多的紫外線!\n" +
                         "所以購買太陽眼鏡")
                 .categoryId(savedCategory.getId())
+                .hasImageProperty(false)
+                .imageList(List.of("url"))
+                .productVariantList(
+                        List.of(ProductVariantRequest.builder()
+                                .sku("SKUBL")
+                                .quantity(100)
+                                .propertyRequestList(List.of())
+                                .build())
+                )
                 .build();
 
-        mockMvc.perform(post("/api/v1/products")
+        mockMvc.perform(post("/api/v1/management/products")
                         .header("Authorization", "Bearer " + accessToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productRequest)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(productRequest.getName()))
-                .andExpect(jsonPath("$.spu").value(productRequest.getSpu()))
-                .andExpect(jsonPath("$.description").value(productRequest.getDescription()))
-                .andExpect(jsonPath("$.categoryId").value(productRequest.getCategoryId()));
+                .andDo(print())
+                .andExpect(status().isCreated());
 
     }
 }

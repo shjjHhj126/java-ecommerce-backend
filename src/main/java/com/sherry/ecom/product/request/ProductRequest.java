@@ -1,6 +1,5 @@
-package com.sherry.ecom.product.Request;
+package com.sherry.ecom.product.request;
 
-import com.sherry.ecom.product.model.ProductVariant;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;

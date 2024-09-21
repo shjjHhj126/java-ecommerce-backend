@@ -1,6 +1,5 @@
-package com.sherry.ecom.product.Response;
+package com.sherry.ecom.product.response;
 
-import com.sherry.ecom.product.model.image.Image;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,6 @@ import java.util.List;
 public class ProductVariantResponse {
     private Integer id;
     private String sku;
-    private String name;
     private Integer quantity;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

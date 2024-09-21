@@ -1,4 +1,4 @@
-package com.sherry.ecom.product.Request;
+package com.sherry.ecom.product.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,8 +14,7 @@ import java.util.List;
 public class ProductVariantRequest {
     @NotNull
     private String sku;
-    @NotNull
-    private String name;
+
     @NotNull
     private Integer quantity;
 

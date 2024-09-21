@@ -1,4 +1,4 @@
-package com.sherry.ecom.product.Response;
+package com.sherry.ecom.product.response;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -14,12 +14,16 @@ import java.util.Optional;
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, Integer> {
     Optional<ProductVariant> findById(Integer id);
 
-    List<ProductVariant> findByProduct(Product product);
-
     @Query("SELECT pv FROM ProductVariant pv " +
             "LEFT JOIN pv.productPropertyValueList ppv " +
             "LEFT JOIN ppv.productPropertyValueImage pvi " +
             "WHERE pv.product.id IN :productIds")
     List<ProductVariant> findVariantsAndProperties(@Param("productIds") List<Integer> productIds);
+
+    @Query("SELECT pv FROM ProductVariant pv " +
+            "LEFT JOIN pv.productPropertyValueList ppv " +
+            "LEFT JOIN ppv.productPropertyValueImage pvi " +
+            "WHERE pv.id = :variantId")
+    ProductVariant findVariantAndProperties(@Param("variantId") Integer variantId);
 
 }

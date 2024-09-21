@@ -1,4 +1,4 @@
-package com.sherry.ecom.product.Request;
+package com.sherry.ecom.product.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

@@ -1,9 +1,6 @@
-package com.sherry.ecom.product.Response;
+package com.sherry.ecom.product.response;
 
 import com.sherry.ecom.category.Category;
-import com.sherry.ecom.product.model.image.Image;
-import com.sherry.ecom.product.model.ProductVariant;
-import com.sherry.ecom.product.model.image.ProductImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

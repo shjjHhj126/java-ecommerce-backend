@@ -69,7 +69,7 @@ public class Product implements Serializable {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(insertable = false)

@@ -2,28 +2,21 @@ package com.sherry.ecom.product.service;
 
 import com.sherry.ecom.category.Category;
 import com.sherry.ecom.exception.ResourceNotFoundException;
-import com.sherry.ecom.product.Response.ProductResponse;
-import com.sherry.ecom.product.Response.ProductVariantResponse;
-import com.sherry.ecom.product.Response.PropertyResponse;
+import com.sherry.ecom.product.response.ProductResponse;
+import com.sherry.ecom.product.response.ProductVariantResponse;
+import com.sherry.ecom.product.response.PropertyResponse;
 import com.sherry.ecom.product.model.Product;
-import com.sherry.ecom.product.model.ProductProperty;
-import com.sherry.ecom.product.model.ProductPropertyValue;
 import com.sherry.ecom.product.model.ProductVariant;
 import com.sherry.ecom.product.model.image.Image;
-import com.sherry.ecom.product.model.image.ProductPropertyValueImage;
 import com.sherry.ecom.product.repository.*;
-import com.sherry.ecom.product.model.image.ProductImage;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -101,7 +94,7 @@ public class ProductService {
                             .level(product.getCategory().getParent().getLevel())
                             .id(product.getCategory().getParent().getId()).build())
                     .propertyList(propertyList)
-                    .createdAt(product.getCreateAt())
+                    .createdAt(product.getCreatedAt())
                     .updatedAt(product.getUpdatedAt())
                     .imgList(product.getImgList().stream().map(Image::getUrl).toList())
                     .totalQuantity(totalQuantity)
@@ -149,9 +142,8 @@ public class ProductService {
                             .id(variant.getId())
                             .sku(variant.getSku())
                             .quantity(variant.getQuantity())
-                            .name(variant.getName())
                             .propertyList(variantPropertyList)
-                            .createdAt(variant.getCreateAt())
+                            .createdAt(variant.getCreatedAt())
                             .updatedAt(variant.getUpdatedAt())
                             .build();
                 })
@@ -184,7 +176,7 @@ public class ProductService {
                         )
                         .collect(Collectors.toList()))
                 .productVariantList(variantResponses)
-                .createdAt(product.getCreateAt())
+                .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .imgList(product.getImgList().stream().map(obj->obj.getUrl()).toList())
                 .build();

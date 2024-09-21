@@ -3,10 +3,10 @@ package com.sherry.ecom.product;
 import com.sherry.ecom.category.Category;
 import com.sherry.ecom.category.CategoryService;
 import com.sherry.ecom.exception.ResourceNotFoundException;
-import com.sherry.ecom.product.Request.PropertyRequest;
-import com.sherry.ecom.product.Request.ProductRequest;
-import com.sherry.ecom.product.Request.ProductVariantRequest;
-import com.sherry.ecom.product.Response.ProductResponse;
+import com.sherry.ecom.product.request.PropertyRequest;
+import com.sherry.ecom.product.request.ProductRequest;
+import com.sherry.ecom.product.request.ProductVariantRequest;
+import com.sherry.ecom.product.response.ProductResponse;
 import com.sherry.ecom.product.model.Product;
 import com.sherry.ecom.product.model.ProductProperty;
 import com.sherry.ecom.product.model.ProductPropertyValue;
@@ -49,11 +49,11 @@ public class ProductController {
     public ResponseEntity<?> create(@RequestBody ProductRequest request,
                                     @AuthenticationPrincipal UserDetails userDetails) {
         System.out.println("in create product");
+
+        // get current user
         if (userDetails == null) {
             throw new RuntimeException("UserDetails not found");
         }
-
-        // get current user
         String username = userDetails.getUsername();
         User currentUser = userService.getCurrentUser(username);
 
@@ -90,7 +90,6 @@ public class ProductController {
 
         for (ProductVariantRequest variantRequest : request.getProductVariantList()) {
             ProductVariant variant = ProductVariant.builder()
-                    .name(variantRequest.getName())
                     .sku(variantRequest.getSku())
                     .quantity(variantRequest.getQuantity())
                     .product(savedProduct)
@@ -216,7 +215,7 @@ public class ProductController {
         System.out.println("in deleting product controller");
         Optional<Product> optProduct = productService.findById(id);
         if(optProduct.isEmpty()){
-            throw new ResourceAccessException("product id :"+id+" not found");
+            return ResponseEntity.badRequest().body("product id :"+id+" not found");
         }
         try{
             productService.deleteById(id);

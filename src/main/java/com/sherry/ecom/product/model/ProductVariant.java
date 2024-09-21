@@ -43,12 +43,9 @@ public class ProductVariant implements Serializable {
     @JsonBackReference  // Prevents infinite recursion
     private Product product;
 
-    @Column(nullable = false)
-    private String name;
-
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(insertable = false)
