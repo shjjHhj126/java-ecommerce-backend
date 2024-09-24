@@ -13,9 +13,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     Optional<Product> findById(Integer id);
 
-    @Query("SELECT p FROM Product p " +
+    @Query("SELECT DISTINCT p FROM Product p " +
             "LEFT JOIN p.category c " +
-            "LEFT JOIN p.imgList i " +
             "WHERE (:categoryId IS NULL OR p.category.id = :categoryId) " +
             "AND (:minPrice IS NULL OR COALESCE(p.discountPrice, p.price) >= :minPrice) " +
             "AND (:maxPrice IS NULL OR COALESCE(p.discountPrice, p.price) <= :maxPrice) " +

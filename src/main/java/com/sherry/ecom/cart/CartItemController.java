@@ -43,7 +43,7 @@ public class CartItemController {
         Optional<ProductVariant> optVar = productVariantService.findById(request.getPrdVarId());
 
         if(optVar.isEmpty()){
-            throw  new ResourceNotFoundException("Product variant id = "+request.getPrdVarId().toString()+" not found");
+            throw new ResourceNotFoundException("Product variant id = "+request.getPrdVarId().toString()+" not found");
         }
 
         if(optVar.get().getQuantity() < request.getQuantity()){

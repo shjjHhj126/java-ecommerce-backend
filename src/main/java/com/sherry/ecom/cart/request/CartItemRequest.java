@@ -14,6 +14,6 @@ public class CartItemRequest {
     private Integer quantity;
 
     @NotNull
-    private Integer PrdVarId;
+    private Integer prdVarId;
 
 }
