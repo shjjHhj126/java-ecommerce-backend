@@ -29,7 +29,7 @@ public class CartItemService {
     }
 
     public Optional<CartItem> findByIdWithVarAndPrd(@NotNull Integer id){
-        return cartItemRepository.findByIdWithProductVariant(id);
+        return cartItemRepository.findByIdWithVarAndPrd(id);
     }
 
     public CartItem create(@NotNull CartItem cartItem){

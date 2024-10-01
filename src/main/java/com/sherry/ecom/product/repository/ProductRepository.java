@@ -22,7 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "AND (:discountRange IS NULL OR (p.discountPrice IS NOT NULL AND " +
             "(CAST(p.price AS float) - CAST(p.discountPrice AS float)) / CAST(p.price AS float) >= :discountRange)) " +
             "AND (:searchParam IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :searchParam, '%'))) " +
-            "AND p.isDeleted = false")
+            "AND p.isDeleted = false " +
+            "ORDER BY p")
     Page<Product> findFilteredProducts(@Param("categoryId") Integer categoryId,
                                           @Param("minPrice") Integer minPrice,
                                           @Param("maxPrice") Integer maxPrice,

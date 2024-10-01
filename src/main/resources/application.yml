@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: false
     properties:
       hibernate:
@@ -21,3 +21,6 @@ application:
       expiration: 86400000
       refresh-token:
         expiration: 604800000
+  stripe-api-key: sk_test_51P6qHpLlyIz5Ae8wdkyXhXb8MFBcyEeWoH54ZB1O0j5sRFNhrAt9mUgCnPdvkVtwO0OMacsXK2gtKtWf6UAlN0Cv00RE7zdcBr
+
+frontend-domain: http://localhost:5173
