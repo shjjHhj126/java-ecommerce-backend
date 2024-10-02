@@ -13,6 +13,7 @@ import com.sherry.ecom.order.model.PaymentStatus;
 import com.sherry.ecom.order.model.ShippingState;
 import com.sherry.ecom.order.request.AddAddressRequest;
 import com.sherry.ecom.order.request.OrderRequest;
+import com.sherry.ecom.order.request.SetOrderStateRequest;
 import com.sherry.ecom.order.response.OrderListResponse;
 import com.sherry.ecom.order.response.OrderResponse;
 import com.sherry.ecom.order.service.OrderService;
@@ -129,7 +130,6 @@ public class OrderController {
         return ResponseEntity.internalServerError().build();
     }
 
-    //Todo: get all orders with status details
     @GetMapping("orders/details")
     public ResponseEntity<?> getOrderWithDetails(
             @RequestParam(required = false) OrderState orderState,
@@ -158,5 +158,19 @@ public class OrderController {
         return ResponseEntity.ok(res);
     }
 
-    //Todo: update order
+    @PutMapping("management/orders/set-state")
+    public ResponseEntity<?> setState(@RequestBody SetOrderStateRequest req) throws ResourceNotFoundException {
+        if (req.getOrderId() == null || req.getOrderStatus() == null) {
+            return ResponseEntity.badRequest().body("Order ID and status must be provided.");
+        }
+
+        try {
+            OrderState orderState = OrderState.valueOf(req.getOrderStatus());
+            orderService.addOrderState(req.getOrderId(), orderState);
+            return ResponseEntity.ok("Order state updated successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid order state: " + req.getOrderStatus());
+        }
+    }
+
 }

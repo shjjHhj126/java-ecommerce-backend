@@ -7,6 +7,7 @@ import com.sherry.ecom.order.model.ShippingRecord;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -33,4 +34,6 @@ public class OrderResponse {
     private List<ShippingRecord> shippingRecordList;
     private List<OrderStateRecord> orderStateRecordList;
     private Payment payment;
+
+    private LocalDateTime createdAt;
 }

@@ -3,6 +3,8 @@ package com.sherry.ecom.payment;
 import com.sherry.ecom.exception.ResourceNotFoundException;
 import com.sherry.ecom.order.model.Order;
 import com.sherry.ecom.order.model.OrderItem;
+import com.sherry.ecom.order.model.Payment;
+import com.sherry.ecom.order.model.PaymentStatus;
 import com.sherry.ecom.order.service.OrderService;
 import com.sherry.ecom.user.User;
 import com.sherry.ecom.user.UserService;
@@ -20,6 +22,7 @@ import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.model.Customer;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -64,14 +67,14 @@ public class PaymentController {
             customer = createNewCustomer(order);
         }
 
-        String FRONTEND_URL = frontendDomain+"/checkout?step=4&order_id="+req.getOrderId().toString()+"&";
+        String frontendUrl = frontendDomain+"/checkout?step=4&order_id="+req.getOrderId().toString()+"&";
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setCustomer(customer.getId())
                 .addAllLineItem(createLineItems(order.getOrderItemList()))
-                .setSuccessUrl(frontendDomain + "success=true")
-                .setCancelUrl(frontendDomain + "canceled=true")
+                .setSuccessUrl(frontendUrl + "success=true")
+                .setCancelUrl(frontendUrl + "canceled=true")
                 .setPaymentIntentData(
                         SessionCreateParams.PaymentIntentData.builder()
                                 .setShipping(createShipping(order)).build())
@@ -83,12 +86,38 @@ public class PaymentController {
         return session.getUrl();//return the stripe checkout page url
     }
 
+    @PostMapping("/set-status")
+    public ResponseEntity<StripeResultResponse>  setStatus(@RequestBody PaymentRequest req) throws StripeException, ResourceNotFoundException {
+        Session session = Session.retrieve(orderService.getStripeSessionId(req.getOrderId()));
+        Customer customer = Customer.retrieve(session.getCustomer());
+
+        StripeResultResponse res = StripeResultResponse.builder().build();
+        if(session.getPaymentStatus().equals("paid") ){
+            orderService.setPaymentStatus(req.getOrderId(), PaymentStatus.COMPLETED);
+
+            res.setStatus(true);
+            res.setMessage(customer.getEmail()+","
+                    +session.getAmountTotal());
+
+        } else if (session.getPaymentStatus().equals("unpaid")) {
+            orderService.setPaymentStatus(req.getOrderId(), PaymentStatus.FAILED);
+            res.setStatus(true);
+            res.setMessage(customer.getEmail()+","
+                    +"0");
+        }else{
+            res.setStatus(true);
+            res.setMessage(customer.getEmail()+","
+                    +"0");
+        }
+        return ResponseEntity.ok(res);
+    }
+
 
     private Customer findExistingCustomer(String email) {
         try {
             // Build search parameters
             CustomerSearchParams params = CustomerSearchParams.builder()
-                    .setQuery("email:" + email)
+                    .setQuery(String.format("email:\"%s\"", email))
                     .build();
 
             // Search for customer
@@ -145,10 +174,11 @@ public class PaymentController {
                     PriceCreateParams.builder()
                             .setProduct(product.getId())
                             .setUnitAmount((long)(orderItem.getDiscountPrice() != null ?
-                                    orderItem.getDiscountPrice()
-                                    :orderItem.getPrice()))
-                            .setCurrency("NTD")
+                                    orderItem.getDiscountPrice()* 100
+                                    :orderItem.getPrice()* 100))
+                            .setCurrency("twd")
                             .build();
+
             Price price = Price.create(price_params);
 
             SessionCreateParams.LineItem.Builder lineItemBuilder = SessionCreateParams.LineItem.builder()

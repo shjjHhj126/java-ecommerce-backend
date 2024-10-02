@@ -180,6 +180,7 @@ public class OrderService {
                     .country(order.getCountry())
                     .postalCode(order.getPostalCode())
                     .payment(order.getPayment())
+                    .createdAt(order.getCreatedAt())
                     .build();
 
             orderRepository.findLatestOrderStateRecordByOrderId(order.getId())
@@ -205,6 +206,26 @@ public class OrderService {
         Payment payment = order.getPayment();
         payment.setStripeSessionId(stripeSessionId);
         order.setPayment(payment);
+    }
 
+    public void setPaymentStatus(Integer orderId, PaymentStatus status) throws ResourceNotFoundException {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found"));
+        Payment payment = order.getPayment();
+        payment.setStatus(status);
+        order.setPayment(payment);
+    }
+
+    public void addOrderState(Integer orderId, OrderState state) throws ResourceNotFoundException {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found"));
+        OrderStateRecord osr = OrderStateRecord.builder()
+                .order(order)
+                .state(state)
+                .build();
+        orderStateRecordRepository.save(osr);
+    }
+
+    public String getStripeSessionId(Integer orderId) throws ResourceNotFoundException {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order with ID " + orderId + " not found"));
+        return order.getPayment().getStripeSessionId();
     }
 }

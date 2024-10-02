@@ -28,44 +28,44 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(
-			AuthenticationService service,
-			CategoryService categoryService
-	) {
-		return args -> {
-			var admin = RegisterRequest.builder()
-					.firstName("Admin1")
-					.lastName("Admin1")
-					.email("admin1@gmail.com")
-					.password("password")
-					.role(ADMIN)
-					.build();
-			System.out.println("Admin1 token: " + service.register(admin).getAccessToken());
-
-			var admin2 = RegisterRequest.builder()
-					.firstName("Admin2")
-					.lastName("Admin2")
-					.email("admin2@gmail.com")
-					.password("password")
-					.role(ADMIN)
-					.build();
-			System.out.println("Admin2 token: " + service.register(admin2).getAccessToken());
-
-			var manager = RegisterRequest.builder()
-					.firstName("Admin3")
-					.lastName("Admin3")
-					.email("manager@gmail.com")
-					.password("password")
-					.role(MANAGER)
-					.build();
-			System.out.println("Manager token: " + service.register(manager).getAccessToken());
-
-			// create default categories
-			createDefaultCategories(categoryService);
-
-		};
-	}
+//	@Bean
+//	public CommandLineRunner commandLineRunner(
+//			AuthenticationService service,
+//			CategoryService categoryService
+//	) {
+//		return args -> {
+//			var admin = RegisterRequest.builder()
+//					.firstName("Admin1")
+//					.lastName("Admin1")
+//					.email("admin1@gmail.com")
+//					.password("password")
+//					.role(ADMIN)
+//					.build();
+//			System.out.println("Admin1 token: " + service.register(admin).getAccessToken());
+//
+//			var admin2 = RegisterRequest.builder()
+//					.firstName("Admin2")
+//					.lastName("Admin2")
+//					.email("admin2@gmail.com")
+//					.password("password")
+//					.role(ADMIN)
+//					.build();
+//			System.out.println("Admin2 token: " + service.register(admin2).getAccessToken());
+//
+//			var manager = RegisterRequest.builder()
+//					.firstName("Admin3")
+//					.lastName("Admin3")
+//					.email("manager@gmail.com")
+//					.password("password")
+//					.role(MANAGER)
+//					.build();
+//			System.out.println("Manager token: " + service.register(manager).getAccessToken());
+//
+//			// create default categories
+//			createDefaultCategories(categoryService);
+//
+//		};
+//	}
 
 	private void createDefaultCategories(CategoryService categoryService) {
 
